@@ -78,7 +78,9 @@ public class DAO {
 		     PreparedStatement stmt = connection.prepareStatement(sql)) {
 			stmt.setString(1, code);
 			result = stmt.executeUpdate();
-		}
+		}catch(SQLException e){
+                    throw e;
+                }
 		return result;
 	}
 

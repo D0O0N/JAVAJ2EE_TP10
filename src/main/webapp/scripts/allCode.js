@@ -34,20 +34,32 @@ $(document).ready(// Exécuté à la fin du chargement de la page
                 error: showError,
                 success: // La fonction qui traite les résultats
                     function () {
-                            console.log("SUPER");
                             fillCodeSelector();                        
                     }
                         
                 
         });			
     }
-    function delCode(){
-        
+    function delCode(code){
+        $.ajax({
+                url: "SupprCode",
+                data: {"code": code},
+                dataType: "json",
+                error: showError,
+                success: // La fonction qui traite les résultats
+                    function (result) {
+                            console.log("Cassé");
+                            fillCodeSelector();  
+                            console.log(result);
+                    }
+                        
+                
+        });
     }
 
         // Fonction qui traite les erreurs de la requête
     function showError(xhr, status, message) {
-            $("#erreur").html("Erreur: " + status + " : " + message);
+        $("#erreur").html("Erreur: " + status + " : " + JSON.parse((xhr.responseText).message));
     }
     
 

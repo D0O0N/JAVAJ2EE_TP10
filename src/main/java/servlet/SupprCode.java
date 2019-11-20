@@ -5,13 +5,19 @@
  */
 package servlet;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.Properties;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.DAO;
+import model.DataSourceFactory;
 
 /**
  *
@@ -32,17 +38,28 @@ public class SupprCode extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SupprCode</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SupprCode at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+       
+        DAO dao = new DAO(DataSourceFactory.getDataSource());
+        Properties resultat = new Properties();
+        
+        try {
+            
+            String code = request.getParameter("code");
+            dao.deleteDiscountCode(code);
+            resultat.put("message","code " + code + " supprimé");
+        }catch (SQLException e){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resultat.put("message","impossible de supprimer le code");
+        }
+        try (PrintWriter out = response.getWriter()){
+            // On spécifie que la servlet va générer du JSON
+            response.setContentType("application/json;charset=UTF-8");
+            // Générer du JSON
+            // Gson gson = new Gson();
+            // setPrettyPrinting pour que le JSON généré soit plus lisible
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String gsonData = gson.toJson(resultat);
+            out.println(gsonData);
         }
     }
 

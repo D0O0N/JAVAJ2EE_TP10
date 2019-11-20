@@ -42,7 +42,7 @@ and open the template in the editor.
             {{! Pour chaque enregistrement }}
             {{#records}}
                 {{! Une ligne dans la table }}
-                <TR><TD>{{discountCode}}</TD><TD>{{rate}}%</TD><TD><button onclick="deleteCode('{{discountCode}}')">Supprimer</button></TD></TR>
+                <TR><TD>{{code}}</TD><TD>{{rate}}%</TD><TD><button onclick="delCode('{{code}}')">Supprimer</button></TD></TR>
             {{/records}}
             </TABLE>
         </script>

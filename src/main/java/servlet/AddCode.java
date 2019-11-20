@@ -5,9 +5,12 @@
  */
 package servlet;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -40,11 +43,19 @@ public class AddCode extends HttpServlet {
        
         String code = request.getParameter("code");
         String taux = request.getParameter("taux");
+        Properties resultat = new Properties();
         try (PrintWriter out = response.getWriter()) {
             DAO dao = new DAO(DataSourceFactory.getDataSource());
             dao.addDiscountCode(code, Float.valueOf(taux));
-            request.setAttribute("message", "Code " + code + " Ajouté");
-            request.setAttribute("codes", dao.allCodes());	
+
+            // On spécifie que la servlet va générer du JSON
+            response.setContentType("application/json;charset=UTF-8");
+            // Générer du JSON
+            // Gson gson = new Gson();
+            // setPrettyPrinting pour que le JSON généré soit plus lisible
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String gsonData = gson.toJson(resultat);
+            out.println(gsonData);
         }
     }
 

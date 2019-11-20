@@ -6,18 +6,18 @@ package model;
  */
 public class DiscountCode {
 
-	private String discountCode;
+	private String code;
 
 	private float rate;
 
 	public DiscountCode(String code, float rate) {
-		this.discountCode = code;
+		this.code = code;
 		this.rate = rate;
 	}
 
 
 	public String getDiscountCode() {
-		return discountCode;
+		return code;
 	}
 
 	public float getRate() {
